@@ -198,8 +198,13 @@
                     else if (index === 10) { colorTheme = 'violet'; iconSvg = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>'; } // ใบวางบิล
                     else if (index === 11) { colorTheme = 'teal'; iconSvg = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>'; } // จ่ายแล้ว
 
+                    let linkUrl = 'index.html';
+                    if (index === 0) {
+                        linkUrl = 'https://financenangrong.github.io/Outstanding-Creditors-Report-Form/';
+                    }
+
                     cardsHtml += `
-                        <a href="index.html" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md hover:border-${colorTheme}-300 transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full cursor-pointer">
+                        <a href="${linkUrl}" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md hover:border-${colorTheme}-300 transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full cursor-pointer">
                             <div class="w-12 h-12 rounded-xl bg-${colorTheme}-50 text-${colorTheme}-600 flex items-center justify-center mb-4 group-hover:bg-${colorTheme}-500 group-hover:text-white transition-colors duration-300">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">${iconSvg}</svg>
                             </div>
