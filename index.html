@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบการเงิน (Financial System)</title>
+    <title>กลุ่มงานการเงิน Finance Nangrong</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- ฟอนต์ Noto Sans Thai -->
@@ -38,9 +38,9 @@
             <button onclick="toggleSidebar()" class="md:hidden text-white hover:bg-blue-700 p-2 rounded transition-colors focus:outline-none">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
             </button>
-            <div class="flex items-center gap-2">
-                <svg class="w-8 h-8 text-blue-300 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                <h1 class="text-2xl font-bold tracking-wide">ระบบการเงิน <span class="text-blue-300 text-lg font-medium hidden sm:inline-block">| Financial Management System</span></h1>
+            <div class="flex items-center gap-3">
+                <img src="https://github.com/FinanceNangRong/financial-system/raw/main/NRHOS.png" alt="NRHOS Logo" class="h-10 w-auto bg-white rounded-md p-1 hidden sm:block">
+                <h1 class="text-2xl font-bold tracking-wide">กลุ่มงานการเงิน Finance Nangrong <span class="text-blue-300 text-lg font-medium hidden lg:inline-block">| Financial Management</span></h1>
             </div>
         </div>
         <div class="flex items-center gap-3">
@@ -111,23 +111,36 @@
             }
         ];
 
-        // รายการย่อยสำหรับระบบเจ้าหนี้การค้า
-        const apSubItems = [
-            "1. แบบรายงานเจ้าหนี้คงเหลือ",
-            "2. รายงานเจ้าหนี้แยกประเภท",
-            "3. รายงานแยกประเภท ประจำปีงบประมาณ",
-            "4. รายงานแยกประเภท ประจำปีงบประมาณ แบบแสดงรายเดือน",
-            "5. รายงานเจ้าหนี้ ทวนเจ้าหนี้ หน่วยงาน",
-            "6. รายงานเจ้าหนี้ ทวนเจ้าหนี้ บริษัท",
-            "7. ทะเบียนคุมส่งทำเช็ค",
-            "8. รายงานเจ้าหนี้ย้อนหลัง",
-            "9. รายงานเจ้าหนี้แยกประเภท ย้อนหลัง",
-            "10. ค้นหาสถานะบริษัท มีเอกสาร/ดำเนินการ/จ่าย (ประจำเดือน)",
-            "11. สร้างใบวางบิล",
-            "12. รวมรายการที่จ่ายไปแล้ว (นับจากเดือนก่อนหน้า)"
-        ];
+        // รายการย่อยสำหรับแต่ละระบบ
+        const subItemsData = {
+            receive: [
+                "1. รับค่ารักษาพยาบาล",
+                "2. รับเงินบริจาก",
+                "3. รับเงินจัดสรรจากกองทุน"
+            ],
+            payment: [
+                "1. จ่ายเจ้าหนี้ บริษัท",
+                "2. จ่ายคืนค่ารักษาพยาบาล",
+                "3. จ่ายค่าตอบแทนเจ้าหน้าที่"
+            ],
+            ap: [
+                "1. แบบรายงานเจ้าหนี้คงเหลือ",
+                "2. รายงานเจ้าหนี้แยกประเภท",
+                "3. รายงานแยกประเภท ประจำปีงบประมาณ",
+                "4. รายงานแยกประเภท ประจำปีงบประมาณ แบบแสดงรายเดือน",
+                "5. รายงานเจ้าหนี้ ทวนเจ้าหนี้ หน่วยงาน",
+                "6. รายงานเจ้าหนี้ ทวนเจ้าหนี้ บริษัท",
+                "7. ทะเบียนคุมส่งทำเช็ค",
+                "8. รายงานเจ้าหนี้ย้อนหลัง",
+                "9. รายงานเจ้าหนี้แยกประเภท ย้อนหลัง",
+                "10. ค้นหาสถานะบริษัท มีเอกสาร/ดำเนินการ/จ่าย (ประจำเดือน)",
+                "11. สร้างใบวางบิล",
+                "12. รวมรายการที่จ่ายไปแล้ว (นับจากเดือนก่อนหน้า)"
+            ],
+            cashbook: []
+        };
 
-        let activeMenuId = 'ap'; // ค่าเริ่มต้นให้แสดงระบบเจ้าหนี้การค้า
+        let activeMenuId = 'ap'; // ค่าเริ่มต้น
 
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -170,7 +183,6 @@
             renderSidebar();
             renderContent();
             
-            // ปิด sidebar บนมือถือเมื่อเลือกเมนูแล้ว
             if (window.innerWidth < 768) {
                 toggleSidebar();
             }
@@ -178,49 +190,42 @@
 
         function renderContent() {
             const contentArea = document.getElementById('contentArea');
-            contentArea.innerHTML = ''; // ล้างเนื้อหาเก่า
+            contentArea.innerHTML = ''; 
 
             const activeMenuInfo = systemMenus.find(m => m.id === activeMenuId);
+            const items = subItemsData[activeMenuId];
 
-            if (activeMenuId === 'ap') {
-                // เนื้อหาสำหรับ ระบบเจ้าหนี้การค้า
+            if (items && items.length > 0) {
                 let cardsHtml = '';
-                apSubItems.forEach((item, index) => {
-                    // จัดกลุ่มสีของไอคอนและการ์ดตามช่วงตัวเลขให้ดูมีสีสัน
+                items.forEach((item, index) => {
                     let colorTheme = 'blue';
                     let iconSvg = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>';
                     
-                    if (index >= 0 && index <= 3) { colorTheme = 'blue'; } // หมวดรายงานแยกประเภท
-                    else if (index >= 4 && index <= 5) { colorTheme = 'indigo'; iconSvg = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>'; } // หมวดหน่วยงาน/บริษัท
-                    else if (index === 6) { colorTheme = 'amber'; iconSvg = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>'; } // เช็ค
-                    else if (index >= 7 && index <= 8) { colorTheme = 'slate'; iconSvg = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>'; } // หมวดย้อนหลัง
-                    else if (index === 9) { colorTheme = 'emerald'; iconSvg = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>'; } // ค้นหา
-                    else if (index === 10) { colorTheme = 'violet'; iconSvg = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>'; } // ใบวางบิล
-                    else if (index === 11) { colorTheme = 'teal'; iconSvg = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>'; } // จ่ายแล้ว
+                    if (activeMenuId === 'receive') {
+                        colorTheme = 'emerald';
+                        iconSvg = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
+                    } else if (activeMenuId === 'payment') {
+                        colorTheme = 'rose';
+                        iconSvg = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>';
+                    } else {
+                        if (index >= 4 && index <= 5) { colorTheme = 'indigo'; iconSvg = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>'; }
+                        else if (index === 6) { colorTheme = 'amber'; iconSvg = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>'; }
+                        else if (index >= 7 && index <= 8) { colorTheme = 'slate'; iconSvg = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>'; }
+                    }
 
-                    let linkUrl = 'index.html';
-                    if (index === 0) {
-                        linkUrl = 'https://financenangrong.github.io/Outstanding-Creditors-Report-Form/';
-                    } else if (index === 1) {
-                        linkUrl = 'https://financenangrong.github.io/Accounts-Payable-Report-Categorized/';
-                    } else if (index === 3) {
-                        linkUrl = 'https://financenangrong.github.io/Annual-Budget-Categorized-Report/';
-                    } else if (index === 4) {
-                        linkUrl = 'https://financenangrong.github.io/Creditor-report-creditor-review-agency/';
-                    } else if (index === 5) {
-                        linkUrl = 'https://financenangrong.github.io/Creditor-report-creditor-review-company/';
-                    } else if (index === 6) {
-                        linkUrl = 'https://financenangrong.github.io/Work-order-control-register/';
-                    } else if (index === 7) {
-                        linkUrl = 'https://financenangrong.github.io/Accounts-Payable-by-Category-Retrospective-/';
-                    } else if (index === 8) {
-                        linkUrl = 'https://financenangrong.github.io/Classified-reports-for-each-fiscal-year-previous-years-./';
-                    } else if (index === 9) {
-                        linkUrl = 'https://financenangrong.github.io/Search-for-company-status-Documents-pending-Processing-Payment-in-progress./';
-                    } else if (index === 10) {
-                        linkUrl = 'https://financenangrong.github.io/Create-an-invoice./';
-                    } else if (index === 11) {
-                        linkUrl = 'https://financenangrong.github.io/Paid-items/';
+                    let linkUrl = '#'; 
+                    if (activeMenuId === 'ap') {
+                        if (index === 0) linkUrl = 'https://financenangrong.github.io/Outstanding-Creditors-Report-Form/';
+                        else if (index === 1) linkUrl = 'https://financenangrong.github.io/Accounts-Payable-Report-Categorized/';
+                        else if (index === 3) linkUrl = 'https://financenangrong.github.io/Annual-Budget-Categorized-Report/';
+                        else if (index === 4) linkUrl = 'https://financenangrong.github.io/Creditor-report-creditor-review-agency/';
+                        else if (index === 5) linkUrl = 'https://financenangrong.github.io/Creditor-report-creditor-review-company/';
+                        else if (index === 6) linkUrl = 'https://financenangrong.github.io/Work-order-control-register/';
+                        else if (index === 7) linkUrl = 'https://financenangrong.github.io/Accounts-Payable-by-Category-Retrospective-/';
+                        else if (index === 8) linkUrl = 'https://financenangrong.github.io/Classified-reports-for-each-fiscal-year-previous-years-./';
+                        else if (index === 9) linkUrl = 'https://financenangrong.github.io/Search-for-company-status-Documents-pending-Processing-Payment-in-progress./';
+                        else if (index === 10) linkUrl = 'https://financenangrong.github.io/Create-an-invoice./';
+                        else if (index === 11) linkUrl = 'https://financenangrong.github.io/Paid-items/';
                     }
 
                     cardsHtml += `
@@ -243,19 +248,15 @@
                             <div class="relative z-10">
                                 <span class="bg-blue-900/50 text-blue-100 px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase border border-blue-500/30 backdrop-blur-sm">System Module</span>
                                 <h2 class="text-3xl md:text-4xl font-bold mt-4 mb-2">${activeMenuInfo.title}</h2>
-                                <p class="text-blue-100 md:text-lg max-w-2xl">เลือกรายการรายงานและการจัดการข้อมูลเจ้าหนี้การค้า เพื่อดูรายละเอียดและดำเนินการต่อ</p>
+                                <p class="text-blue-100 md:text-lg max-w-2xl">เลือกรายการงานที่ต้องการดำเนินการในส่วนของ${activeMenuInfo.title}</p>
                             </div>
-                            <!-- ตกแต่งกราฟิกมุมขวา -->
-                            <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
                         </div>
-
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                             ${cardsHtml}
                         </div>
                     </div>
                 `;
             } else {
-                // เนื้อหาสำหรับหน้าอื่นๆ ที่ยังไม่เสร็จ (Placeholder)
                 contentArea.innerHTML = `
                     <div class="h-full flex flex-col items-center justify-center animate-fade-in text-center p-8">
                         <div class="w-32 h-32 bg-slate-100 rounded-full flex items-center justify-center mb-6">
@@ -274,7 +275,6 @@
             }
         }
 
-        // เริ่มต้นการทำงานเมื่อโหลดหน้าเว็บ
         document.addEventListener('DOMContentLoaded', () => {
             renderSidebar();
             renderContent();
