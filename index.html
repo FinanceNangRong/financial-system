@@ -115,7 +115,7 @@
         const subItemsData = {
             receive: [
                 "1. รับค่ารักษาพยาบาล",
-                "2. รับเงินบริจาก",
+                "2. รับเงินบริจาค",
                 "3. รับเงินจัดสรรจากกองทุน"
             ],
             payment: [
@@ -226,6 +226,8 @@
                         else if (index === 9) linkUrl = 'https://financenangrong.github.io/Search-for-company-status-Documents-pending-Processing-Payment-in-progress./';
                         else if (index === 10) linkUrl = 'https://financenangrong.github.io/Create-an-invoice./';
                         else if (index === 11) linkUrl = 'https://financenangrong.github.io/Paid-items/';
+                    } else if (activeMenuId === 'payment') {
+                        if (index === 2) linkUrl = 'https://financenangrong.github.io/Payment-Entry-System/';
                     }
 
                     cardsHtml += `
