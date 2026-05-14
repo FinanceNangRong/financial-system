@@ -117,7 +117,8 @@
                 "1. รับค่ารักษาพยาบาล",
                 "2. รับเงินบริจาค",
                 "3. รับเงินจัดสรรจากกองทุน",
-                "4. Report QR-Code"
+                "4. Report QR-Code",
+                "5. ลง QR-Code จากใบเสร็จ",
             ],
             payment: [
                 "1. จ่ายเจ้าหนี้ บริษัท",
@@ -234,6 +235,7 @@
                     } else if (activeMenuId === 'receive') {
                         if (index === 1) linkUrl = 'https://financenangrong.github.io/Donation-system/';
                         else if (index === 3) linkUrl = 'https://financenangrong.github.io/Excel-to-Sheet-Converter/';
+                        else if (index === 4) linkUrl = 'https://financenangrong.github.io/Payment-registration-system-QR-Code/';
                     }
 
                     cardsHtml += `
