@@ -124,7 +124,7 @@
         // รายการย่อยสำหรับแต่ละระบบ
         const subItemsData = {
             receive: [
-                "1. รับค่ารักษาพยาบาล",
+                "1. บันทึกข้อมูลนำส่งเงิน ค่ารักษา บริจาก อื่นๆ",
                 "2. รับเงินบริจาค",
                 "3. รับเงินจัดสรรจากกองทุน",
                 "4. Report QR-Code",
@@ -257,7 +257,8 @@
                     } else if (activeMenuId === 'payment') {
                         if (index === 2) linkUrl = 'https://financenangrong.github.io/Payment-Entry-System/';
                     } else if (activeMenuId === 'receive') {
-                        if (index === 1) linkUrl = 'https://financenangrong.github.io/Donation-system/';
+                        if (index === 0) linkUrl = 'https://financenangrong.github.io/1.-Receiving-medical-expenses---Donations---Others/';
+                        else if (index === 1) linkUrl = 'https://financenangrong.github.io/Donation-system/';
                         else if (index === 3) linkUrl = 'https://financenangrong.github.io/Excel-to-Sheet-Converter/';
                         else if (index === 4) linkUrl = 'https://financenangrong.github.io/Payment-registration-system-QR-Code/';
                     } else if (activeMenuId === 'dowsload') {
