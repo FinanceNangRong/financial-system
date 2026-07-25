@@ -4576,7 +4576,7 @@
             if (!name) return "";
             let formatted = name.trim().replace(/\s+/g, ' ');
             if (formatted.includes("บ.")) {
-                formatted = formatted.replace("บ.", "บริษัท ").trim();
+                formatted = formatted.replace("บจก.", "บริษัท ").trim();
                 if (!formatted.includes("จำกัด")) formatted += " จำกัด";
             } else if (formatted.includes("หจก.")) {
                 formatted = formatted.replace("หจก.", "ห้างหุ้นส่วนจำกัด ").trim();
