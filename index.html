@@ -4117,7 +4117,7 @@
 
             let renderData = sortedRows.map(row => {
                 let pType = "เช็ค", pClass = "text-orange-500 font-bold";
-                if (row._valM.includes("GFMIS") || row._valM.includes("E-Bidding")) { pType = "จ่ายตรงผู้ขาย"; pClass = "text-blue-600 font-bold"; }
+                if (row._valM.includes("GFMIS") || row._valM.includes("E-Bidding (เงินฝากคลัง)")) { pType = "จ่ายตรงผู้ขาย"; pClass = "text-blue-600 font-bold"; }
 
                 let dHtml = "", displayDate = "-";
                 // ใช้สำหรับโหมดปกติที่ไม่มีการแตกคอลัมน์
