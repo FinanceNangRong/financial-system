@@ -4071,7 +4071,7 @@
 
             let sumEmpty = 0, sumHasDoc = 0, sumProcessing = 0, sumPaid = 0;
             currentFoundRows.forEach(row => {
-                if (row._status === "แจ้งหนี้ ไม่มีเอกสาร") sumEmpty += row._e;
+                if (row._status === "แจ้งหนี้") sumEmpty += row._e;
                 else if (row._status === "มีเอกสาร") sumHasDoc += row._e;
                 else if (row._status === "อยู่ระหว่างดำเนินการ") sumProcessing += row._e;
                 else if (row._status === "ชำระ") sumPaid += row._e;
@@ -4121,7 +4121,7 @@
 
                 let dHtml = "", displayDate = "-";
                 // ใช้สำหรับโหมดปกติที่ไม่มีการแตกคอลัมน์
-                if (row._status === "แจ้งหนี้ ไม่มีเอกสาร") { displayDate = row._dateRecStr; dHtml = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-600 border border-rose-200"><span class="w-1.5 h-1.5 bg-rose-500 rounded-full mr-1.5 print:hidden"></span>แจ้งหนี้ ไม่มีเอกสาร</span>'; }
+                if (row._status === "แจ้งหนี้") { displayDate = row._dateRecStr; dHtml = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-600 border border-rose-200"><span class="w-1.5 h-1.5 bg-rose-500 rounded-full mr-1.5 print:hidden"></span>แจ้งหนี้</span>'; }
                 else if (row._status === "มีเอกสาร") { displayDate = row._dateRecStr; dHtml = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-600 border border-blue-200"><span class="w-1.5 h-1.5 bg-blue-500 rounded-full mr-1.5 print:hidden"></span>มีเอกสาร สามารถวางบิลได้</span>'; }
                 else if (row._status === "อยู่ระหว่างดำเนินการ") { displayDate = row._dateProcessStrShort; dHtml = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-200"><span class="w-1.5 h-1.5 bg-amber-500 rounded-full mr-1.5 print:hidden"></span>อยู่ระหว่างดำเนินการ</span>'; }
                 else if (row._status === "ชำระ") { displayDate = row._datePayStr; dHtml = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1.5 print:hidden"></span>ชำระ</span>'; }
@@ -4265,7 +4265,7 @@
                             <label class="font-semibold text-slate-700 whitespace-nowrap">ตัวกรองสถานะ:</label>
                             <select onchange="changeStatusFilter(this.value)" class="pl-4 pr-10 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none text-sm font-medium">
                                 <option value="all" ${selectedStatusFilter === 'all' ? 'selected' : ''}>แสดงทั้งหมด</option>
-                                <option value="empty" ${selectedStatusFilter === 'empty' ? 'selected' : ''}>แจ้งหนี้ ไม่มีเอกสาร</option>
+                                <option value="empty" ${selectedStatusFilter === 'empty' ? 'selected' : ''}>แจ้งหนี้</option>
                                 <option value="has_doc" ${selectedStatusFilter === 'has_doc' ? 'selected' : ''}>มีเอกสาร สามารถวางบิลได้</option>
                                 <option value="processing" ${selectedStatusFilter === 'processing' ? 'selected' : ''}>อยู่ระหว่างดำเนินการ</option>
                                 <option value="paid" ${selectedStatusFilter === 'paid' ? 'selected' : ''}>ชำระ</option>
@@ -4296,7 +4296,7 @@
                     <h4 class="text-lg font-bold mb-2 text-slate-800 text-center">สรุปยอดรวม</h4>
                     <table style="width: 45%; margin: 0 auto; border-collapse: collapse; font-size: 10pt;">
                         <tbody>
-                            <tr><td style="border: 1px solid #000; padding: 4px;">แจ้งหนี้ ไม่มีเอกสาร</td><td style="border: 1px solid #000; padding: 4px; text-align: right;">${formatNumber(sumEmpty)}</td></tr>
+                            <tr><td style="border: 1px solid #000; padding: 4px;">แจ้งหนี้</td><td style="border: 1px solid #000; padding: 4px; text-align: right;">${formatNumber(sumEmpty)}</td></tr>
                             <tr><td style="border: 1px solid #000; padding: 4px;">มีเอกสาร สามารถวางบิลได้</td><td style="border: 1px solid #000; padding: 4px; text-align: right;">${formatNumber(sumHasDoc)}</td></tr>
                             <tr><td style="border: 1px solid #000; padding: 4px;">อยู่ระหว่างดำเนินการ</td><td style="border: 1px solid #000; padding: 4px; text-align: right;">${formatNumber(sumProcessing)}</td></tr>
                             <tr><td style="border: 1px solid #000; padding: 4px;">ชำระ</td><td style="border: 1px solid #000; padding: 4px; text-align: right;">${formatNumber(sumPaid)}</td></tr>
@@ -4343,7 +4343,7 @@
             
             exportData.push([]);
             exportData.push(["สรุปยอดรวม"]);
-            exportData.push(["แจ้งหนี้ ไม่มีเอกสาร", ...Array(colCount - 2).fill(""), formatNumber(currentSummary.sumEmpty)]);
+            exportData.push(["แจ้งหนี้", ...Array(colCount - 2).fill(""), formatNumber(currentSummary.sumEmpty)]);
             exportData.push(["มีเอกสาร สามารถวางบิลได้", ...Array(colCount - 2).fill(""), formatNumber(currentSummary.sumHasDoc)]);
             exportData.push(["อยู่ระหว่างดำเนินการ", ...Array(colCount - 2).fill(""), formatNumber(currentSummary.sumProcessing)]);
             exportData.push(["ชำระ", ...Array(colCount - 2).fill(""), formatNumber(currentSummary.sumPaid)]);
@@ -4407,7 +4407,7 @@
             html += `</table><br><h4 style="text-align: center; font-family: 'Sarabun', Tahoma, sans-serif;">สรุปยอดรวม</h4>`;
             html += `<table align="center" border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; font-family: 'Sarabun', Tahoma, sans-serif; width: 45%; font-size: 14px; page-break-inside: avoid;">`;
             html += `<tr><th colspan="2" style="background-color: #f1f5f9; text-align: left;">สรุปยอดรวม</th></tr>`;
-            html += `<tr><td>แจ้งหนี้ ไม่มีเอกสาร</td><td align="right">${formatNumber(currentSummary.sumEmpty)}</td></tr>`;
+            html += `<tr><td>แจ้งหนี้</td><td align="right">${formatNumber(currentSummary.sumEmpty)}</td></tr>`;
             html += `<tr><td>มีเอกสาร สามารถวางบิลได้</td><td align="right">${formatNumber(currentSummary.sumHasDoc)}</td></tr>`;
             html += `<tr><td>อยู่ระหว่างดำเนินการ</td><td align="right">${formatNumber(currentSummary.sumProcessing)}</td></tr>`;
             html += `<tr><td>ชำระ</td><td align="right">${formatNumber(currentSummary.sumPaid)}</td></tr>`;
