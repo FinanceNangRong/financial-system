@@ -3070,8 +3070,8 @@
 
         // ฟังก์ชันหลักสำหรับ Render ตาราง
         function renderReport5(container) {
-            // 1. กรองเฉพาะสถานะ "กำลังดำเนินการจ่าย"
-            let dateFilteredData = appData.filter(row => row._status.includes('กำลังดำเนินการจ่าย'));
+            // 1. กรองเฉพาะสถานะ "อยู่ระหว่างดำเนินการ"
+            let dateFilteredData = appData.filter(row => row._status.includes('อยู่ระหว่างดำเนินการ'));
             
             // 2. กรองตามวันที่ระบุ
             if (startDate_forReport5) { 
@@ -4073,8 +4073,8 @@
             currentFoundRows.forEach(row => {
                 if (row._status === "") sumEmpty += row._e;
                 else if (row._status === "มีเอกสาร") sumHasDoc += row._e;
-                else if (row._status === "กำลังดำเนินการจ่าย") sumProcessing += row._e;
-                else if (row._status === "ชำระแล้ว") sumPaid += row._e;
+                else if (row._status === "อยู่ระหว่างดำเนินการ") sumProcessing += row._e;
+                else if (row._status === "ชำระ") sumPaid += row._e;
             });
 
             const netBalance = sumEmpty + sumHasDoc + sumProcessing;
@@ -4092,10 +4092,10 @@
             let filteredRows = currentFoundRows;
             if (selectedStatusFilter === 'empty') filteredRows = filteredRows.filter(r => r._status === "");
             else if (selectedStatusFilter === 'has_doc') filteredRows = filteredRows.filter(r => r._status === "มีเอกสาร");
-            else if (selectedStatusFilter === 'processing') filteredRows = filteredRows.filter(r => r._status === "กำลังดำเนินการจ่าย");
-            else if (selectedStatusFilter === 'paid') filteredRows = filteredRows.filter(r => r._status === "ชำระแล้ว");
+            else if (selectedStatusFilter === 'processing') filteredRows = filteredRows.filter(r => r._status === "อยู่ระหว่างดำเนินการ");
+            else if (selectedStatusFilter === 'paid') filteredRows = filteredRows.filter(r => r._status === "ชำระ");
 
-            // เช็คว่าต้องเปิดคอลัมน์พิเศษหรือไม่ (สำหรับสถานะดำเนินการ / ชำระแล้ว)
+            // เช็คว่าต้องเปิดคอลัมน์พิเศษหรือไม่ (สำหรับสถานะดำเนินการ / ชำระ)
             let showExtraCol = (selectedStatusFilter === 'processing' || selectedStatusFilter === 'paid');
             let extraColHeader = selectedStatusFilter === 'processing' ? 'วันที่ดำเนินการ' : 'วันที่ชำระเงิน';
             let colSpanCount = showExtraCol ? 7 : 6;
@@ -4108,8 +4108,8 @@
                 if (a._valM !== b._valM) return a._valM.localeCompare(b._valM, 'th');
                 const getTs = (r) => {
                     if (r._status === "" || r._status === "มีเอกสาร") return r._dateRecTs || Number.MAX_SAFE_INTEGER;
-                    if (r._status === "กำลังดำเนินการจ่าย") return r._dateProcessTs || Number.MAX_SAFE_INTEGER;
-                    if (r._status === "ชำระแล้ว") return r._datePayTs || Number.MAX_SAFE_INTEGER;
+                    if (r._status === "อยู่ระหว่างดำเนินการ") return r._dateProcessTs || Number.MAX_SAFE_INTEGER;
+                    if (r._status === "ชำระ") return r._datePayTs || Number.MAX_SAFE_INTEGER;
                     return r._dateRecTs || Number.MAX_SAFE_INTEGER;
                 };
                 return getTs(a) - getTs(b);
@@ -4123,8 +4123,8 @@
                 // ใช้สำหรับโหมดปกติที่ไม่มีการแตกคอลัมน์
                 if (row._status === "") { displayDate = row._dateRecStr; dHtml = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-600 border border-rose-200"><span class="w-1.5 h-1.5 bg-rose-500 rounded-full mr-1.5 print:hidden"></span>มีหนี้ฯ แต่ไม่สามารถวางบิลได้</span>'; }
                 else if (row._status === "มีเอกสาร") { displayDate = row._dateRecStr; dHtml = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-600 border border-blue-200"><span class="w-1.5 h-1.5 bg-blue-500 rounded-full mr-1.5 print:hidden"></span>มีเอกสาร สามารถวางบิลได้</span>'; }
-                else if (row._status === "กำลังดำเนินการจ่าย") { displayDate = row._dateProcessStrShort; dHtml = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-200"><span class="w-1.5 h-1.5 bg-amber-500 rounded-full mr-1.5 print:hidden"></span>กำลังดำเนินการจ่าย</span>'; }
-                else if (row._status === "ชำระแล้ว") { displayDate = row._datePayStr; dHtml = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1.5 print:hidden"></span>ชำระแล้ว</span>'; }
+                else if (row._status === "อยู่ระหว่างดำเนินการ") { displayDate = row._dateProcessStrShort; dHtml = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-200"><span class="w-1.5 h-1.5 bg-amber-500 rounded-full mr-1.5 print:hidden"></span>อยู่ระหว่างดำเนินการ</span>'; }
+                else if (row._status === "ชำระ") { displayDate = row._datePayStr; dHtml = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1.5 print:hidden"></span>ชำระ</span>'; }
 
                 // เก็บแยกสำหรับโหมดแตกคอลัมน์ 3
                 let recDate = row._dateRecStr;
@@ -4237,7 +4237,7 @@
                             <span class="text-lg md:text-xl font-bold text-amber-700 mt-2 break-all">${formatNumber(sumProcessing)}</span>
                         </div>
                         <div class="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100 flex flex-col justify-between">
-                            <span class="text-[0.7rem] md:text-xs font-semibold text-emerald-600 mb-1 leading-tight flex items-center">ชำระแล้ว<br>&nbsp;</span>
+                            <span class="text-[0.7rem] md:text-xs font-semibold text-emerald-600 mb-1 leading-tight flex items-center">ชำระ<br>&nbsp;</span>
                             <span class="text-lg md:text-xl font-bold text-emerald-700 mt-2 break-all">${formatNumber(sumPaid)}</span>
                         </div>
                     </div>
@@ -4267,8 +4267,8 @@
                                 <option value="all" ${selectedStatusFilter === 'all' ? 'selected' : ''}>แสดงทั้งหมด</option>
                                 <option value="empty" ${selectedStatusFilter === 'empty' ? 'selected' : ''}>มีหนี้ในระบบการเงิน แต่ไม่สามารถวางบิลได้</option>
                                 <option value="has_doc" ${selectedStatusFilter === 'has_doc' ? 'selected' : ''}>มีเอกสาร สามารถวางบิลได้</option>
-                                <option value="processing" ${selectedStatusFilter === 'processing' ? 'selected' : ''}>กำลังดำเนินการจ่าย</option>
-                                <option value="paid" ${selectedStatusFilter === 'paid' ? 'selected' : ''}>ชำระแล้ว</option>
+                                <option value="processing" ${selectedStatusFilter === 'processing' ? 'selected' : ''}>อยู่ระหว่างดำเนินการ</option>
+                                <option value="paid" ${selectedStatusFilter === 'paid' ? 'selected' : ''}>ชำระ</option>
                             </select>
                         </div>
                         <div class="flex space-x-2">
@@ -4298,8 +4298,8 @@
                         <tbody>
                             <tr><td style="border: 1px solid #000; padding: 4px;">มีหนี้ในระบบฯ แต่ไม่สามารถวางบิลได้</td><td style="border: 1px solid #000; padding: 4px; text-align: right;">${formatNumber(sumEmpty)}</td></tr>
                             <tr><td style="border: 1px solid #000; padding: 4px;">มีเอกสาร สามารถวางบิลได้</td><td style="border: 1px solid #000; padding: 4px; text-align: right;">${formatNumber(sumHasDoc)}</td></tr>
-                            <tr><td style="border: 1px solid #000; padding: 4px;">กำลังดำเนินการจ่าย</td><td style="border: 1px solid #000; padding: 4px; text-align: right;">${formatNumber(sumProcessing)}</td></tr>
-                            <tr><td style="border: 1px solid #000; padding: 4px;">ชำระแล้ว</td><td style="border: 1px solid #000; padding: 4px; text-align: right;">${formatNumber(sumPaid)}</td></tr>
+                            <tr><td style="border: 1px solid #000; padding: 4px;">อยู่ระหว่างดำเนินการ</td><td style="border: 1px solid #000; padding: 4px; text-align: right;">${formatNumber(sumProcessing)}</td></tr>
+                            <tr><td style="border: 1px solid #000; padding: 4px;">ชำระ</td><td style="border: 1px solid #000; padding: 4px; text-align: right;">${formatNumber(sumPaid)}</td></tr>
                             <tr style="font-weight: bold; background-color: #f1f5f9;">
                                 <td style="border: 1px solid #000; padding: 4px;">ยอดคงเหลือสุทธิ</td><td style="border: 1px solid #000; padding: 4px; text-align: right;">${formatNumber(netBalance)}</td>
                             </tr>
@@ -4345,8 +4345,8 @@
             exportData.push(["สรุปยอดรวม"]);
             exportData.push(["มีหนี้ในระบบฯ แต่ไม่สามารถวางบิลได้", ...Array(colCount - 2).fill(""), formatNumber(currentSummary.sumEmpty)]);
             exportData.push(["มีเอกสาร สามารถวางบิลได้", ...Array(colCount - 2).fill(""), formatNumber(currentSummary.sumHasDoc)]);
-            exportData.push(["กำลังดำเนินการจ่าย", ...Array(colCount - 2).fill(""), formatNumber(currentSummary.sumProcessing)]);
-            exportData.push(["ชำระแล้ว", ...Array(colCount - 2).fill(""), formatNumber(currentSummary.sumPaid)]);
+            exportData.push(["อยู่ระหว่างดำเนินการ", ...Array(colCount - 2).fill(""), formatNumber(currentSummary.sumProcessing)]);
+            exportData.push(["ชำระ", ...Array(colCount - 2).fill(""), formatNumber(currentSummary.sumPaid)]);
             exportData.push(["ยอดคงเหลือสุทธิ", ...Array(colCount - 2).fill(""), formatNumber(currentSummary.netBalance)]);
 
             let ws = XLSX.utils.aoa_to_sheet(exportData);
@@ -4409,8 +4409,8 @@
             html += `<tr><th colspan="2" style="background-color: #f1f5f9; text-align: left;">สรุปยอดรวม</th></tr>`;
             html += `<tr><td>มีหนี้ในระบบฯ แต่ไม่สามารถวางบิลได้</td><td align="right">${formatNumber(currentSummary.sumEmpty)}</td></tr>`;
             html += `<tr><td>มีเอกสาร สามารถวางบิลได้</td><td align="right">${formatNumber(currentSummary.sumHasDoc)}</td></tr>`;
-            html += `<tr><td>กำลังดำเนินการจ่าย</td><td align="right">${formatNumber(currentSummary.sumProcessing)}</td></tr>`;
-            html += `<tr><td>ชำระแล้ว</td><td align="right">${formatNumber(currentSummary.sumPaid)}</td></tr>`;
+            html += `<tr><td>อยู่ระหว่างดำเนินการ</td><td align="right">${formatNumber(currentSummary.sumProcessing)}</td></tr>`;
+            html += `<tr><td>ชำระ</td><td align="right">${formatNumber(currentSummary.sumPaid)}</td></tr>`;
             html += `<tr><td><b>ยอดคงเหลือสุทธิ</b></td><td align="right"><b>${formatNumber(currentSummary.netBalance)}</b></td></tr></table>`;
             
             let fileDownload = document.createElement("a");
