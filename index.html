@@ -1283,15 +1283,19 @@
         .print-only { display: none; }
         
         @media print {
-            @page { size: A4 landscape; margin: 10mm; }
+            @page { 
+                size: A4 landscape; 
+                margin: 8mm 6mm; 
+            }
             body, html { 
-                background-color: white; 
+                background-color: white !important; 
                 height: auto !important; 
                 overflow: visible !important; 
                 display: block !important; 
             }
-            .h-screen, .overflow-hidden, .overflow-auto, .overflow-x-auto, .flex-1, main, #printArea, #contentContainer {
+            .h-screen, .overflow-hidden, .overflow-auto, .overflow-x-auto, .flex-1, main, #printArea, #contentContainer, [style*="max-height"] {
                 height: auto !important; 
+                max-height: none !important;
                 overflow: visible !important; 
                 display: block !important; 
                 position: static !important; 
@@ -1300,8 +1304,8 @@
                 page-break-inside: auto !important; 
                 break-inside: auto !important;
             }
-            .shadow-sm { box-shadow: none !important; }
-            .rounded-lg { border-radius: 0 !important; }
+            .shadow-sm, .shadow-md, .shadow { box-shadow: none !important; }
+            .rounded-lg, .rounded-md { border-radius: 0 !important; }
             .no-print { display: none !important; }
             .print-only { display: block !important; }
             .print-full-width { 
@@ -1310,31 +1314,50 @@
                 padding: 0 !important; 
                 box-shadow: none !important; 
             }
+            
+            /* รีเซ็ตตำแหน่ง Sticky เพื่อป้องกันข้อมูลเลื่อนหรือลอยทับซ้อนเวลาพิมพ์ */
+            table, thead, tbody, tfoot, tr, th, td {
+                position: static !important;
+                left: auto !important;
+                right: auto !important;
+                top: auto !important;
+                bottom: auto !important;
+                transform: none !important;
+            }
+
             table { 
-                width: 100%; 
-                border-collapse: collapse; 
+                width: 100% !important; 
+                border-collapse: collapse !important; 
                 page-break-inside: auto; 
             }
-            tr { page-break-inside: avoid; page-break-after: auto; }
-            thead { display: table-header-group; }
-            tfoot { display: table-footer-group; }
+            tr { 
+                page-break-inside: avoid !important; 
+                break-inside: avoid !important;
+                page-break-after: auto; 
+            }
+            thead { display: table-header-group !important; }
+            tfoot { display: table-footer-group !important; }
+
             th, td { 
                 border: 1px solid #000 !important; 
-                padding: 2mm 3px !important; 
+                padding: 0.8mm 1.5px !important; 
                 height: auto !important; 
-                line-height: 1 !important; 
-                font-size: 12.5px !important; 
+                line-height: 1.15 !important; 
+                font-size: 7pt !important; 
             }
             th { 
-                background-color: #f3f4f6 !important; 
+                background-color: #f1f5f9 !important; 
                 -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact;
                 font-weight: bold !important; 
+                text-align: center !important;
             }
             td { font-weight: normal !important; }
             td.font-medium, td.font-semibold, td.font-bold { font-weight: normal !important; }
             tfoot td { 
-                background-color: #f3f4f6 !important; 
+                background-color: #f1f5f9 !important; 
                 -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact;
                 font-weight: bold !important; 
             }
             .print-fixed-table { 
@@ -1343,17 +1366,50 @@
                 max-width: 100% !important; 
                 margin: 0 auto !important; 
             }
-            .print-fixed-table th, .print-fixed-table td { 
-                white-space: normal !important; 
-                word-wrap: break-word !important; 
-                overflow-wrap: break-word !important; 
+            
+            /* กำหนดขนาดความกว้าง 15 คอลัมน์ให้พอดีกับกระดาษ A4 แนวนอน (กว้างพิมพ์ได้ ~285mm) */
+            .col-seq {
+                width: 8mm !important;
+                min-width: 8mm !important;
+                max-width: 8mm !important;
+                text-align: center !important;
             }
-            .print-truncate { 
-                white-space: nowrap !important; 
-                overflow: hidden !important; 
-                text-overflow: ellipsis !important; 
-                word-wrap: normal !important; 
-                overflow-wrap: normal !important; 
+            .col-category {
+                width: 48mm !important;
+                min-width: 48mm !important;
+                max-width: 48mm !important;
+                text-align: left !important;
+                white-space: normal !important;
+                word-wrap: break-word !important;
+                overflow-wrap: break-word !important;
+            }
+            .col-month {
+                width: 16.5mm !important;
+                min-width: 16.5mm !important;
+                max-width: 16.5mm !important;
+                text-align: right !important;
+                white-space: nowrap !important;
+            }
+            .col-total {
+                width: 22mm !important;
+                min-width: 22mm !important;
+                max-width: 22mm !important;
+                text-align: right !important;
+                white-space: nowrap !important;
+            }
+            
+            /* ป้องกันตัวเลขถูกตัดทอนหรือตกบรรทัด */
+            .print-number {
+                white-space: nowrap !important;
+                word-break: keep-all !important;
+                text-align: right !important;
+            }
+            
+            .print-title {
+                font-size: 11pt !important;
+                font-weight: bold !important;
+                text-align: center !important;
+                margin-bottom: 4mm !important;
             }
         }
         
@@ -1791,21 +1847,21 @@
                     let yearLabel = "";
                     if (fm.m >= 9) yearLabel = ` ${(fy - 1).toString().slice(-2)}`;
                     else yearLabel = ` ${fy.toString().slice(-2)}`;
-                    monthHeaders += `<th class="px-2 py-3 font-semibold text-center border border-gray-300 w-[95px] min-w-[95px] whitespace-nowrap bg-blue-100 print:static print:bg-blue-50">${fm.label}${yearLabel}</th>`;
+                    monthHeaders += `<th class="px-2 py-3 font-semibold text-center border border-gray-300 w-[95px] min-w-[95px] whitespace-nowrap bg-blue-100 print:static print:bg-blue-50 col-month">${fm.label}${yearLabel}</th>`;
                 });
 
                 let html = `
                     <div class="mb-10 last:mb-0">
-                        <h3 class="text-xl font-bold text-center mb-4 print-only">${printTitle}</h3>
+                        <h3 class="text-xl font-bold text-center mb-4 print-only print-title">${printTitle}</h3>
                         <h4 class="text-lg font-bold text-gray-800 mb-2 no-print border-l-4 border-blue-600 pl-3">ตารางประจำปีงบประมาณ ${currentYear}</h4>
-                        <div class="overflow-x-auto bg-white rounded-lg border border-gray-200 shadow-sm" style="max-height: 60vh;">
+                        <div class="overflow-x-auto bg-white rounded-lg border border-gray-200 shadow-sm print:overflow-visible print:max-h-none print:border-0 print:shadow-none" style="max-height: 60vh;">
                             <table class="min-w-full text-sm text-left border-collapse print-fixed-table" style="table-layout: auto;">
                                 <thead class="bg-blue-100 text-blue-900 border-b-2 border-gray-300">
                                     <tr>
-                                        <th class="px-3 py-3 font-semibold text-center border border-gray-300 w-[47px] min-w-[47px] sticky left-0 z-20 bg-blue-100 print:static print:bg-blue-50">ลำดับ</th>
-                                        <th class="px-4 py-3 font-semibold text-center border border-gray-300 w-[200px] min-w-[200px] max-w-[200px] sticky left-[47px] z-20 bg-blue-100 print:static print:bg-blue-50">ค่า</th>
+                                        <th class="px-3 py-3 font-semibold text-center border border-gray-300 w-[47px] min-w-[47px] sticky left-0 z-20 bg-blue-100 print:static print:bg-blue-50 col-seq">ลำดับ</th>
+                                        <th class="px-4 py-3 font-semibold text-center border border-gray-300 w-[200px] min-w-[200px] max-w-[200px] sticky left-[47px] z-20 bg-blue-100 print:static print:bg-blue-50 col-category">ค่า</th>
                                         ${monthHeaders}
-                                        <th class="px-3 py-3 font-bold text-center border border-gray-300 w-[114px] min-w-[114px] bg-blue-200 print:static print:bg-blue-100">รวมทั้งสิ้น</th>
+                                        <th class="px-3 py-3 font-bold text-center border border-gray-300 w-[114px] min-w-[114px] bg-blue-200 print:static print:bg-blue-100 col-total">รวมทั้งสิ้น</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200 bg-white">
@@ -1818,28 +1874,28 @@
                     const rowData = pivotData[catKey];
                     html += `
                         <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="px-3 py-2 text-center text-gray-500 border border-gray-200 sticky left-0 z-10 bg-white print:static">${index++}</td>
-                            <td class="px-4 py-2 text-gray-800 font-medium border border-gray-200 sticky left-[47px] z-10 bg-white print:static truncate print-truncate w-[200px] max-w-[200px]" title="${catKey}">${catKey}</td>
+                            <td class="px-3 py-2 text-center text-gray-500 border border-gray-200 sticky left-0 z-10 bg-white print:static col-seq">${index++}</td>
+                            <td class="px-4 py-2 text-gray-800 font-medium border border-gray-200 sticky left-[47px] z-10 bg-white print:static truncate col-category" title="${catKey}">${catKey}</td>
                     `;
                     fiscalMonths.forEach(fm => {
                         const val = rowData[fm.m];
-                        html += `<td class="px-2 py-2 text-right text-gray-700 border border-gray-200 w-[95px] min-w-[95px]">${val !== 0 ? formatNumber(val) : ''}</td>`;
+                        html += `<td class="px-2 py-2 text-right text-gray-700 border border-gray-200 w-[95px] min-w-[95px] col-month print-number">${val !== 0 ? formatNumber(val) : ''}</td>`;
                     });
-                    html += `<td class="px-2 py-2 text-right text-blue-700 font-bold border border-gray-200 bg-blue-50/30 print:bg-transparent w-[114px] min-w-[114px]">${formatNumber(rowData.total)}</td></tr>`;
+                    html += `<td class="px-2 py-2 text-right text-blue-700 font-bold border border-gray-200 bg-blue-50/30 print:bg-transparent w-[114px] min-w-[114px] col-total print-number">${formatNumber(rowData.total)}</td></tr>`;
                 });
 
                 html += `
                                 </tbody>
-                                <tfoot class="bg-gray-100 border-t-4 border-gray-300 font-bold text-gray-900 sticky bottom-0 z-20">
+                                <tfoot class="bg-gray-100 border-t-4 border-gray-300 font-bold text-gray-900 sticky bottom-0 z-20 print:static">
                                     <tr>
                                         <td colspan="2" class="px-4 py-3 text-right border border-gray-300 sticky left-0 z-20 bg-gray-100 print:static">รวมยอดทั้งสิ้น</td>
                 `;
                 
                 fiscalMonths.forEach(fm => {
                     const val = totalCols[fm.m];
-                    html += `<td class="px-2 py-3 text-right border border-gray-300 bg-gray-100 w-[95px] min-w-[95px]">${val !== 0 ? formatNumber(val) : '-'}</td>`;
+                    html += `<td class="px-2 py-3 text-right border border-gray-300 bg-gray-100 w-[95px] min-w-[95px] col-month print-number">${val !== 0 ? formatNumber(val) : '-'}</td>`;
                 });
-                html += `<td class="px-2 py-3 text-right text-blue-900 border border-gray-300 bg-gray-200 print:bg-transparent w-[114px] min-w-[114px]">${formatNumber(totalCols.total)}</td></tr></tfoot>
+                html += `<td class="px-2 py-3 text-right text-blue-900 border border-gray-300 bg-gray-200 print:bg-transparent w-[114px] min-w-[114px] col-total print-number">${formatNumber(totalCols.total)}</td></tr></tfoot>
                             </table>
                         </div>
                     </div>
@@ -5692,13 +5748,14 @@
         @media print {
             @page { size: A4 landscape; margin: 10mm; }
             body, html { 
-                background-color: white; 
+                background-color: white !important; 
                 height: auto !important; 
                 overflow: visible !important; 
                 display: block !important; 
             }
-            .h-screen, .overflow-hidden, .overflow-auto, .overflow-x-auto, .flex-1, main, #printArea, #contentContainer {
+            .h-screen, .overflow-hidden, .overflow-auto, .overflow-x-auto, .flex-1, main, #printArea, #contentContainer, [style*="max-height"] {
                 height: auto !important; 
+                max-height: none !important;
                 overflow: visible !important; 
                 display: block !important; 
                 position: static !important; 
@@ -5707,8 +5764,8 @@
                 page-break-inside: auto !important; 
                 break-inside: auto !important;
             }
-            .shadow-sm { box-shadow: none !important; }
-            .rounded-lg { border-radius: 0 !important; }
+            .shadow-sm, .shadow-md, .shadow { box-shadow: none !important; }
+            .rounded-lg, .rounded-md { border-radius: 0 !important; }
             .no-print { display: none !important; }
             .print-only { display: block !important; }
             .print-full-width { 
@@ -5717,50 +5774,44 @@
                 padding: 0 !important; 
                 box-shadow: none !important; 
             }
+            table, thead, tbody, tfoot, tr, th, td {
+                position: static !important;
+                left: auto !important;
+                right: auto !important;
+                top: auto !important;
+                bottom: auto !important;
+                transform: none !important;
+            }
             table { 
-                width: 100%; 
-                border-collapse: collapse; 
+                width: 100% !important; 
+                border-collapse: collapse !important; 
                 page-break-inside: auto; 
             }
-            tr { page-break-inside: avoid; page-break-after: auto; }
-            thead { display: table-header-group; }
-            tfoot { display: table-footer-group; }
+            tr { page-break-inside: avoid !important; break-inside: avoid !important; }
+            thead { display: table-header-group !important; }
+            tfoot { display: table-footer-group !important; }
             th, td { 
                 border: 1px solid #000 !important; 
-                padding: 2mm 3px !important; 
+                padding: 1.5mm 3px !important; 
                 height: auto !important; 
-                line-height: 1 !important; 
-                font-size: 12.5px !important; 
+                line-height: 1.2 !important; 
+                font-size: 8.5pt !important; 
             }
             th { 
-                background-color: #f3f4f6 !important; 
+                background-color: #f1f5f9 !important; 
                 -webkit-print-color-adjust: exact; 
                 font-weight: bold !important; 
             }
             td { font-weight: normal !important; }
-            td.font-medium, td.font-semibold, td.font-bold { font-weight: normal !important; }
             tfoot td { 
-                background-color: #f3f4f6 !important; 
+                background-color: #f1f5f9 !important; 
                 -webkit-print-color-adjust: exact; 
                 font-weight: bold !important; 
             }
             .print-fixed-table { 
                 table-layout: fixed !important; 
                 width: 100% !important; 
-                max-width: 100% !important; 
                 margin: 0 auto !important; 
-            }
-            .print-fixed-table th, .print-fixed-table td { 
-                white-space: normal !important; 
-                word-wrap: break-word !important; 
-                overflow-wrap: break-word !important; 
-            }
-            .print-truncate { 
-                white-space: nowrap !important; 
-                overflow: hidden !important; 
-                text-overflow: ellipsis !important; 
-                word-wrap: normal !important; 
-                overflow-wrap: normal !important; 
             }
         }
         
